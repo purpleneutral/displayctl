@@ -1,6 +1,6 @@
 # Maintainer: purpleneutral <purpleneutral@users.noreply.github.com>
 pkgname=displayctl
-pkgver=1.0.0
+pkgver=1.0.1
 pkgrel=1
 pkgdesc="GTK 4 display configuration tool with visual layout editor"
 arch=('any')
