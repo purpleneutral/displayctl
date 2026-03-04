@@ -108,3 +108,20 @@ class DisplayConfig:
     @property
     def enabled(self) -> list[Monitor]:
         return [m for m in self.monitors if m.connected and m.enabled]
+
+    def normalize_positions(self) -> None:
+        """Shift all monitors so the bounding box starts at (0, 0).
+
+        This prevents the virtual screen from having a large offset that
+        confuses tools like flameshot.
+        """
+        active = self.enabled
+        if not active:
+            return
+
+        min_x = min(m.x for m in active)
+        min_y = min(m.y for m in active)
+        if min_x != 0 or min_y != 0:
+            for m in active:
+                m.x -= min_x
+                m.y -= min_y

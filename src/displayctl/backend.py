@@ -175,6 +175,7 @@ class XrandrBackend(DisplayBackend):
         return config
 
     def apply(self, config: DisplayConfig) -> None:
+        config.normalize_positions()
         cmd = ["xrandr"]
         for mon in config.monitors:
             if not mon.connected:
@@ -353,6 +354,7 @@ class WlrRandrBackend(DisplayBackend):
         return mapping.get((rotation, flipped), "normal")
 
     def apply(self, config: DisplayConfig) -> None:
+        config.normalize_positions()
         cmd = ["wlr-randr"]
         for mon in config.monitors:
             if not mon.connected:

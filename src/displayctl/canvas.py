@@ -22,7 +22,7 @@ SELECTED_BORDER = (0.20, 0.40, 0.80)
 TEXT_COLOR = (0.10, 0.10, 0.12)
 SUBTEXT_COLOR = (0.35, 0.35, 0.40)
 
-SNAP_TOLERANCE = 30  # pixels in monitor-space
+SNAP_TOLERANCE_PX = 15  # pixels on screen (canvas space)
 
 
 class DisplayCanvas(Gtk.DrawingArea):
@@ -269,9 +269,11 @@ class DisplayCanvas(Gtk.DrawingArea):
             for m in self._config.enabled
             if m.name != mon.name
         ]
+        # Convert screen-pixel tolerance to monitor-space
+        tol = int(SNAP_TOLERANCE_PX / self._scale) if self._scale > 0 else 50
         self._snap = Snap(
             (mon.display_width, mon.display_height),
-            tolerance=SNAP_TOLERANCE,
+            tolerance=tol,
             rects=others,
         )
         for cb in self._on_select:
@@ -308,6 +310,10 @@ class DisplayCanvas(Gtk.DrawingArea):
             mon.y = mon.drag_y
             mon.drag_x = None
             mon.drag_y = None
+
+        # Normalize so bounding box starts at (0,0) — prevents dead zones
+        if self._config:
+            self._config.normalize_positions()
 
         self._snap = None
         self.queue_draw()
