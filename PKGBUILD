@@ -13,7 +13,7 @@ optdepends=(
     'wlr-randr: Wayland (wlroots) display backend'
 )
 source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
-sha256sums=('e7edc71f501953fd2fc3db8ed6fd2aa185f78a0c37ba3c36973c662a217ffc28')
+sha256sums=('756555d5ddeaed8c666070639d714383c5010ed75671cb970076a7498f6e967e')
 
 build() {
     cd "$srcdir/$pkgname-$pkgver"
