@@ -10,10 +10,18 @@ from .model import DisplayConfig
 PROFILES_DIR = Path.home() / ".config" / "displayctl" / "profiles"
 
 
+def _safe_path(name: str) -> Path:
+    """Resolve profile path, rejecting directory traversal."""
+    path = (PROFILES_DIR / f"{name}.json").resolve()
+    if path.parent != PROFILES_DIR.resolve():
+        raise ValueError(f"Invalid profile name: {name!r}")
+    return path
+
+
 def save_profile(config: DisplayConfig, name: str) -> Path:
     """Save current configuration as a named profile."""
     PROFILES_DIR.mkdir(parents=True, exist_ok=True)
-    path = PROFILES_DIR / f"{name}.json"
+    path = _safe_path(name)
     data = {
         "monitors": [
             {
@@ -42,7 +50,7 @@ def save_profile(config: DisplayConfig, name: str) -> Path:
 
 def load_profile(name: str) -> dict:
     """Load a profile by name."""
-    path = PROFILES_DIR / f"{name}.json"
+    path = _safe_path(name)
     return json.loads(path.read_text())
 
 
@@ -55,7 +63,7 @@ def list_profiles() -> list[str]:
 
 def delete_profile(name: str) -> None:
     """Delete a profile."""
-    path = PROFILES_DIR / f"{name}.json"
+    path = _safe_path(name)
     if path.exists():
         path.unlink()
 
