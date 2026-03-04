@@ -311,10 +311,6 @@ class DisplayCanvas(Gtk.DrawingArea):
             mon.drag_x = None
             mon.drag_y = None
 
-        # Normalize so bounding box starts at (0,0) — prevents dead zones
-        if self._config:
-            self._config.normalize_positions()
-
         self._snap = None
         self.queue_draw()
 
