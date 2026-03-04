@@ -110,15 +110,44 @@ class DisplayConfig:
         return [m for m in self.monitors if m.connected and m.enabled]
 
     def normalize_positions(self) -> None:
-        """Shift all monitors so the bounding box starts at (0, 0).
+        """Normalize monitor positions to prevent dead zones.
 
-        This prevents the virtual screen from having a large offset that
-        confuses tools like flameshot.
+        1. Shift bounding box to (0, 0).
+        2. Close vertical gaps: pull each monitor up to the nearest
+           monitor above it (in x-range overlap), eliminating dead
+           zones that break tools like flameshot.
+        3. Re-shift to origin.
         """
         active = self.enabled
         if not active:
             return
 
+        # Phase 1: shift bounding box to origin
+        min_x = min(m.x for m in active)
+        min_y = min(m.y for m in active)
+        if min_x != 0 or min_y != 0:
+            for m in active:
+                m.x -= min_x
+                m.y -= min_y
+
+        # Phase 2: close vertical gaps (process top-to-bottom)
+        active.sort(key=lambda m: m.y)
+        for i, m in enumerate(active):
+            if m.y == 0:
+                continue
+            # Find the max bottom-edge of monitors above this one
+            # that overlap in x (strict — touching edges don't count)
+            best_y = 0
+            for o in active[:i]:
+                if o.x >= m.x + m.display_width:
+                    continue
+                if o.x + o.display_width <= m.x:
+                    continue
+                if o.y + o.display_height <= m.y:
+                    best_y = max(best_y, o.y + o.display_height)
+            m.y = best_y
+
+        # Phase 3: re-shift to origin
         min_x = min(m.x for m in active)
         min_y = min(m.y for m in active)
         if min_x != 0 or min_y != 0:
