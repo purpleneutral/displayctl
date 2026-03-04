@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Display Editor
+GenericName=Display Configuration
+Comment=Configure display layout, resolution, and refresh rate
+Exec=displayctl
+Icon=preferences-desktop-display
+Terminal=false
+Type=Application
+Categories=Settings;HardwareSettings;
+Keywords=display;monitor;screen;resolution;xrandr;

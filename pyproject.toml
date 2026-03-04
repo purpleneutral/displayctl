@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "displayctl"
+version = "1.0.0"
+description = "GTK 4 display configuration tool with visual layout editor"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+requires-python = ">=3.10"
+authors = [
+    { name = "purpleneutral" },
+]
+dependencies = [
+    "PyGObject>=3.42.0",
+]
+keywords = ["display", "monitor", "xrandr", "wayland", "gtk"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: X11 Applications :: GTK",
+    "Intended Audience :: End Users/Desktop",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: Desktop Environment",
+]
+
+[project.urls]
+Homepage = "https://github.com/purpleneutral/displayctl"
+Repository = "https://github.com/purpleneutral/displayctl"
+Issues = "https://github.com/purpleneutral/displayctl/issues"
+
+[project.gui-scripts]
+displayctl = "displayctl.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
