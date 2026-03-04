@@ -1,3 +1,3 @@
 """displayctl — GTK 4 Display Management Tool."""
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
